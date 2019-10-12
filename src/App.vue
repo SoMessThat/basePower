@@ -1,23 +1,54 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <router-view/>
-  </div>
+	<el-container>
+		<!-- <el-header> -->
+			<!-- <span></span> -->
+		<!-- </el-header> -->
+		<el-main>
+			<el-container>
+			<el-aside width="200px">
+				<el-menu :default-openeds="['1']">
+					<el-submenu index="1">
+						<template slot="title"><i class="el-icon-message"></i>导航一</template>
+						<el-menu-item-group>
+							<template slot="title">分组一</template>
+							<router-link :to="{path:'/first'}"><el-menu-item index="1-1">一</el-menu-item></router-link>
+							<router-link :to="{path:'/#'}"><el-menu-item index="1-2">二</el-menu-item></router-link>
+						</el-menu-item-group>
+						<el-menu-item-group title="分组2">
+							<el-menu-item index="1-3">选项3</el-menu-item>
+						</el-menu-item-group>
+						<el-submenu index="1-4">
+							<template slot="title">选项4</template>
+							<el-menu-item index="1-4-1">选项4-1</el-menu-item>
+						</el-submenu>
+					</el-submenu>
+				</el-menu>
+			</el-aside>
+					<el-main>
+						<router-view></router-view>
+					</el-main>
+			</el-container>
+		</el-main>
+		<!-- <el-footer> -->
+			<!-- 脚222222222222222222222222222222222222222222222222222 -->
+		<!-- </el-footer> -->
+	</el-container>
 </template>
 
 <script>
 export default {
-  name: 'App'
+
 }
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+	html,body,#app,.el-container{
+			/*设置内部填充为0，几个布局元素之间没有间距*/
+			padding: 0px;
+			/*外部间距也是如此设置*/
+			margin: 0px;
+			/*统一设置高度为100%*/
+			height: 100%;
+			overflow:hidden;
+	}
 </style>

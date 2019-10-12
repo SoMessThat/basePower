@@ -1,23 +1,23 @@
 <template>
   <div id="app">
-      <el-button type="primary">
-        <router-link :to="{path:'/first'}">你好</router-link>
-      </el-button>
-      <el-button type="success">你好</el-button>
-      <el-button type="info">你好</el-button>
-      <el-button type="warning">你好</el-button>
-      <el-button type="danger">你好</el-button>
+      first
     </div>
 </template>
 
 <script>
 export default {
-  name: 'HelloWorld',
+  name: 'First',
   data () {
     return {
       msg: 'Welcome to Your Vue.js App'
     }
+  },
+  methods:{
+    gotolink(){
+      this.$router.replace('/first')
+    }
   }
+ 
 }
 </script>
 
