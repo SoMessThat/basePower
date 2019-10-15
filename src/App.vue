@@ -12,7 +12,7 @@
 						<el-menu-item-group>
 							<template slot="title">分组一</template>
 							<router-link :to="{path:'/first'}"><el-menu-item index="1-1">组织管理</el-menu-item></router-link>
-							<router-link :to="{path:'/#'}"><el-menu-item index="1-2">二</el-menu-item></router-link>
+							<router-link :to="{path:'/second'}"><el-menu-item index="1-2">二</el-menu-item></router-link>
 						</el-menu-item-group>
 						<el-menu-item-group title="分组2">
 							<el-menu-item index="1-3">选项3</el-menu-item>

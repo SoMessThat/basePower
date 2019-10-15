@@ -128,9 +128,6 @@ export default {
     }
   },
   methods: {
-    handleCheckChange(data, checked, indeterminate) {
-      console.log(data, checked, indeterminate);
-    },
     handleCheckNode(data, node, vueComponent) {
       console.log(data, node, vueComponent);
       this.$axios({
