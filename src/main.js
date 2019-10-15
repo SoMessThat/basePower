@@ -8,7 +8,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import axios from 'axios'
 
 Vue.prototype.$axios = axios;
-axios.defaults.headers.post["Content-type"] = "application/json"
+axios.defaults.headers.post["Content-type"] = "application/json;charset=utf-8"
 
 Vue.use(ElementUI)
 
