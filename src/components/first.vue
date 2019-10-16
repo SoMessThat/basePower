@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-      <div style="width: 20%; float: left;">
+    <el-container>
+      <el-aside width="20%">
         <div>
           <el-button @click="onCreate('departmentForm')">新增</el-button>
           <el-button @click="onDel">删除</el-button>
@@ -14,8 +15,8 @@
           lazy
           show-checkbox>
         </el-tree>
-      </div>
-      <div>
+      </el-aside>
+      <el-main>
         <el-form :model="department" ref="departmentForm" :inline="true" label-position="right" class="demo-form-inline" label-width="100px" :hide-required-asterisk="true">
           <el-form-item label="名字" prop="name">
             <el-input v-model="department.name"></el-input>
@@ -42,7 +43,7 @@
           <el-form-item label="上级编号" prop="parentCode">
             <el-input v-model="department.parentCode" :disabled="true"></el-input>
           </el-form-item>
-          <el-form-item label="路劲" prop="parentPath">
+          <el-form-item label="路径" prop="parentPath">
             <el-input v-model="department.parentPath"></el-input>
           </el-form-item>
           <br/>
@@ -87,7 +88,8 @@
             <el-button type="primary" @click="onSubmit" style="margin-left:250px">保存</el-button>
           </el-form-item>
         </el-form>
-      </div>
+      </el-main>
+    </el-container>
   </div>
 </template>
 
@@ -212,7 +214,6 @@ export default {
             parentPath: this.department.parentPath
           }
         }).then((res) => {
-          console.log(res)
           this.$refs.tree.append({"code":res.data,"name":this.department.name,"parentCode":this.department.parentCode,"node":null},
             this.$refs.tree.getCurrentKey())
         }).catch((res) => {

@@ -1,38 +1,56 @@
 <template>
   <div id="app">
-      <div style="width: 20%; float: left;">
-        <el-tree
-          :props="props"
-          :load="loadNode"
-          ref="tree"
-          node-key="code"
-          @node-click="handleCheckNode"
-          lazy>
-        </el-tree>
-      </div>
-      <div>
-        
-        <el-input v-model="name" placeholder="账号/姓名" style="width:500px"></el-input>
-        <el-button type="primary" icon="el-icon-search" @click="onSubmit">搜索</el-button>
-        <el-button type="primary" icon="el-icon-add" @click="onAdd">新建</el-button>
-        <el-table :data="user" style="width: 100%;float: left;"> 
-          <el-table-column prop="account" label="账号" width="180"></el-table-column> 
-          <el-table-column prop="name" label="姓名" width="180"></el-table-column> 
-          <el-table-column prop="idCard" label="身份证"></el-table-column>
-          <el-table-column prop="phone" label="联系方式"></el-table-column>
-          <el-table-column prop="email" label="邮箱"></el-table-column>
-          <el-table-column prop="createTime" label="创建时间"></el-table-column>
-          <el-table-column prop="updateTime" label="修改时间"></el-table-column>
-          <el-table-column prop="status" label="状态"></el-table-column>
-          <el-table-column fixed="right" label="操作" width="150"> 
+    <el-container>
+      <el-aside width="20%">
+        <el-tree :props="props" :load="loadNode" ref="tree" node-key="code" @node-click="handleCheckNode" lazy></el-tree>
+      </el-aside>
+      <el-main>
+          <el-input v-model="name" placeholder="账号/姓名" style="width:500px"></el-input>
+          <el-button type="primary" icon="el-icon-search" @click="onSearch">搜索</el-button>
+          <el-button type="primary" icon="el-icon-add" @click="addUser">新建</el-button>
+          <el-table :data="users"> 
+            <el-table-column prop="account" label="账号"></el-table-column> 
+            <el-table-column prop="name" label="姓名"></el-table-column> 
+            <el-table-column prop="idCard" label="身份证"></el-table-column>
+            <el-table-column prop="phone" label="联系方式"></el-table-column>
+            <el-table-column prop="email" label="邮箱"></el-table-column>
+            <el-table-column prop="createTime" label="创建时间"></el-table-column>
+            <el-table-column prop="updateTime" label="修改时间"></el-table-column>
+            <el-table-column fixed="right" label="操作" width="150"> 
             <template slot-scope="scope">   
-              <el-button @click="handleClick(scope.row)" type="text" size="small">修改</el-button>   
-              <el-button type="text" size="small">删除</el-button> 
+              <el-button @click="modifyUser(scope.row)" type="text" size="small">修改</el-button>
+              <el-button @click="delUser(scope.row.id)" type="text" size="small">删除</el-button> 
               <el-button type="text" size="small">分配</el-button> 
             </template>
-          </el-table-column>   
-        </el-table> 
-    </div>
+            </el-table-column>   
+          </el-table>
+      </el-main>
+    </el-container>
+    
+    <el-dialog title="表单弹框" :visible.sync="dialogFormVisible" center>
+      <el-form ref="form" :model="user" label-width="80px">
+        <el-form-item label="账号">
+          <el-input v-model="user.account"></el-input>
+        </el-form-item>
+        <el-form-item label="姓名">
+          <el-input v-model="user.name"></el-input>
+        </el-form-item>
+        <el-form-item label="身份证">
+          <el-input v-model="user.idCard"></el-input>
+        </el-form-item>
+        <el-form-item label="联系方式">
+          <el-input v-model="user.phone"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱">
+          <el-input v-model="user.email"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button @click="onSibmit">确 定</el-button>
+      </span>
+    </el-dialog>
+    
   </div>
 </template>
 
@@ -40,10 +58,14 @@
 import GLOBAL from '@/components/global_val.js'
 
 export default {
-  name: 'First',
+  name: 'Second',
   data() {
     return {
       name: '',
+      id: null,
+      visible: true,
+      isAdd: true,
+      dialogFormVisible: false,
       props: {
         code: 'code',
         label: 'name',
@@ -70,7 +92,7 @@ export default {
         updateTime: "",
         status: ""
       },
-      user: [{
+      users: [{
         id: null,
         account: "",
         name: "",
@@ -79,23 +101,35 @@ export default {
         email: "",
         createTime: "",
         updateTime: "",
+        visible: true,
         status: ""
-      }]
+      }],
+      user: {
+        account: "",
+        name: "",
+        idCard: "",
+        phone: "",
+        email: ""
+      }
     }
   },
   methods: {
-    handleCheckNode(data, node, vueComponent) {
+    intiTable(code) {
       this.$axios({
-          method: "post",
-          url: GLOBAL.api+"/user/queryUser",
-          data:{
-            departmentCode:data.code
-          }
-        }).then((res) => {
-          this.user = res.data.data;
-        }).catch((res) => {
-          console.log(res)
-        });
+        method: "post",
+        url: GLOBAL.api+"/user/queryUser",
+        data:{
+          departmentCode: code
+        }
+      }).then((res) => {
+        this.users = res.data.data;
+      }).catch((res) => {
+        console.log(res);
+        this.$message.error('查询失败');
+      });
+    },
+    handleCheckNode(data, node, vueComponent) {
+      this.intiTable(this.$refs.tree.getCurrentKey());
     },
     loadNode(node, resolve) {
       if (node.level === 0) {
@@ -105,7 +139,8 @@ export default {
         }).then((res) => {
           return resolve(res.data);
         }).catch((res) => {
-          console.log(res)
+          console.log(res);
+          this.$message.error('查询失败');
         });
       }else{
         this.$axios({
@@ -117,31 +152,121 @@ export default {
         }).then((res) => {
           return resolve(res.data)
         }).catch((res) => {
-          console.log(res)
+          console.log(res);
+          this.$message.error('查询失败');
         });
       }
     },
-    handleClick(row) {
-      console.log(row);
-    },
-    onSubmit() {
+    onSearch() {
       this.$axios({
-          method: "post",
-          url: GLOBAL.api+"/user/queryUser",
-          data:{
-            departmentCode:this.$refs.tree.getCurrentKey(),
-            name:this.name
-          }
-        }).then((res) => {
-          console.log(res)
-          this.user = res.data.data;
-        }).catch((res) => {
-          console.log(res)
-        });
+        method: "post",
+        url: GLOBAL.api+"/user/queryUser",
+        data:{
+          departmentCode:this.$refs.tree.getCurrentKey(),
+          name:this.name
+        }
+      }).then((res) => {
+        this.users = res.data.data;
+      }).catch((res) => {
+        console.log(res);
+        this.$message.error('查询失败');
+      });
+    },
+    addUser() {
+      this.dialogFormVisible = true;
+      this.isAdd = true;
+    },
+    modifyUser(row) {
+      this.dialogFormVisible = true;
+      this.user = row;
+      this.id = row.id;
+      this.isAdd = false;
+    },
+    delUser(id) {
+      this.$axios({
+        method: "get",
+        url: GLOBAL.api+"/user/delUserById",
+        params: {
+          id: id
+        }
+      }).then((res) => {
+        if(res.data > 0){
+          this.$message({
+            message: '删除成功',
+            type: 'success'
+          });
+          this.intiTable(this.$refs.tree.getCurrentKey());
+        }else{
+          this.$message.error('删除失败');
+        }
+      }).catch((res) => {
+        console.log(res);
+        this.$message.error('删除失败');
+      });
+    },
+    onSibmit() {
+      if(this.isAdd) {
+        this.onAdd();
+      }else {
+        this.onModify();
+      }
     },
     onAdd() {
-
+      this.$axios({
+        method: "post",
+        url: GLOBAL.api+"/user/addUser",
+        data:{
+          account: this.user.account,
+          name: this.user.name,
+          idCard: this.user.idCard,
+          phone: this.user.phone,
+          email: this.user.email,
+          departmentCode: this.$refs.tree.getCurrentKey()
+        }
+      }).then((res) => {
+        if(res.data > 0){
+          this.$message({
+            message: '新增成功',
+            type: 'success'
+          });
+          this.dialogFormVisible = false;
+          this.intiTable(this.$refs.tree.getCurrentKey());
+        }else{
+          this.$message.error('新增失败');
+        }
+      }).catch((res) => {
+        console.log(res);
+        this.$message.error('新增失败');
+      });
     },
+    onModify() {
+      this.$axios({
+        method: "post",
+        url: GLOBAL.api+"/user/updateUserById",
+        data:{
+          id: this.id,
+          account: this.user.account,
+          name: this.user.name,
+          idCard: this.user.idCard,
+          phone: this.user.phone,
+          email: this.user.email
+        }
+      }).then((res) => {
+        if(res.data > 0){
+          this.$message({
+            message: '修改成功',
+            type: 'success'
+          });
+          this.dialogFormVisible = false;
+          this.intiTable(this.$refs.tree.getCurrentKey());
+        }else{
+          this.$message.error('修改失败');
+        }
+      }).catch((res) => {
+        console.log(res);
+        this.$message.error('修改失败');
+      });
+    }
   }
 };
 </script>
