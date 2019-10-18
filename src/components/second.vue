@@ -24,6 +24,8 @@
             </template>
             </el-table-column>   
           </el-table>
+          <el-pagination layout="total, prev, pager, next, jumper" :current-page="page.currentPage" :page-size="page.pageSize" :total="page.total" 
+            @current-change="pageChange" hide-on-single-page></el-pagination>
       </el-main>
     </el-container>
     
@@ -66,6 +68,11 @@ export default {
       visible: true,
       isAdd: true,
       dialogFormVisible: false,
+      page: {
+        total: 1,
+        pageSize: 7,
+        currentPage: 1
+      },
       props: {
         code: 'code',
         label: 'name',
@@ -113,16 +120,23 @@ export default {
       }
     }
   },
+  mounted(){
+    this.intiTable(this.$refs.tree.getCurrentKey());
+  },
   methods: {
     intiTable(code) {
       this.$axios({
         method: "post",
         url: GLOBAL.api+"/user/queryUser",
         data:{
-          departmentCode: code
+          departmentCode: code,
+          pageSize: this.page.pageSize,
+          pageNum: this.page.currentPage
         }
       }).then((res) => {
         this.users = res.data.data;
+        console.log(this.users);
+        this.page.total = res.data.total;
       }).catch((res) => {
         console.log(res);
         this.$message.error('查询失败');
@@ -163,10 +177,13 @@ export default {
         url: GLOBAL.api+"/user/queryUser",
         data:{
           departmentCode:this.$refs.tree.getCurrentKey(),
-          name:this.name
+          name:this.name,
+          pageSize: this.page.pageSize,
+          pageNum: this.page.currentPage
         }
       }).then((res) => {
         this.users = res.data.data;
+        this.page.total = res.data.total;
       }).catch((res) => {
         console.log(res);
         this.$message.error('查询失败');
@@ -266,6 +283,10 @@ export default {
         console.log(res);
         this.$message.error('修改失败');
       });
+    },
+    pageChange(page) {
+      this.page.currentPage = page;
+      this.onSearch();
     }
   }
 };

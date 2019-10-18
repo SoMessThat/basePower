@@ -58,10 +58,10 @@
             <el-input v-model="department.areaId"></el-input>
           </el-form-item>
           <el-form-item label="状态" prop="status">
-            <el-select v-model="department.status" placeholder="状态"  style="width:202px">
-              <el-option label="启用" value="ENABLED"></el-option>
-              <el-option label="禁用" value="UNENABLED"></el-option>
-            </el-select>
+            <el-radio-group v-model="department.status" size="medium">
+              <el-radio-button label="ENABLED" autofocus="true">启用</el-radio-button>
+              <el-radio-button label="UNENABLED">冻结</el-radio-button>
+            </el-radio-group>
           </el-form-item>
           <br/>
           <el-form-item label="地址" prop="position">
@@ -143,6 +143,7 @@ export default {
           this.isAdd = false;
         }).catch((res) => {
           console.log(res)
+          this.$message.error('查找失败');
         });
     },
     loadNode(node, resolve) {
@@ -154,6 +155,7 @@ export default {
           return resolve(res.data);
         }).catch((res) => {
           console.log(res)
+          this.$message.error('加载失败');
         });
       }else{
         // console.log(node)
@@ -167,6 +169,7 @@ export default {
           return resolve(res.data)
         }).catch((res) => {
           console.log(res)
+          this.$message.error('查询失败');
         });
       }
     },
@@ -184,9 +187,17 @@ export default {
             codes: '("' + this.$refs.tree.getCheckedKeys().join('","') + '")'
           }
         }).then((res) => {
-          this.$refs.tree.getCheckedKeys().forEach(item => {
-            this.$refs.tree.remove(item);
-          })
+          if(res.data > 0) {
+            this.$message({
+              message: '删除成功',
+              type: 'success'
+            });
+            this.$refs.tree.getCheckedKeys().forEach(item => {
+              this.$refs.tree.remove(item);
+            })
+          }else {
+            this.$message.error('删除失败');
+          }
         }).catch((res) => {
           console.log(res)
         });
@@ -214,8 +225,16 @@ export default {
             parentPath: this.department.parentPath
           }
         }).then((res) => {
-          this.$refs.tree.append({"code":res.data,"name":this.department.name,"parentCode":this.department.parentCode,"node":null},
-            this.$refs.tree.getCurrentKey())
+          if(!res.data && typeof(res.data)!="undefined" && res.data!=0) {
+            this.$message({
+              message: '添加成功',
+              type: 'success'
+            });
+            this.$refs.tree.append({"code":res.data,"name":this.department.name,"parentCode":this.department.parentCode,"node":null},
+              this.$refs.tree.getCurrentKey())
+          }else {
+            this.$message.error('添加失败');
+          }
         }).catch((res) => {
           console.log(res)
         });
@@ -242,7 +261,14 @@ export default {
             status: this.department.status
           }
         }).then((res) => {
-          return (res.data)
+          if(res.data > 0) {
+            this.$message({
+              message: '修改成功',
+              type: 'success'
+            });
+          }else {
+            this.$message.error('修改失败');
+          }
         }).catch((res) => {
           console.log(res)
         });

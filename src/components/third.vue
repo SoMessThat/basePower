@@ -6,7 +6,7 @@
 		<el-table :data="roles"> 
 			<el-table-column prop="code" label="编号"></el-table-column> 			
 			<el-table-column prop="name" label="角色名"></el-table-column> 			
-			<el-table-column prop="pcode" label="父级编号"></el-table-column> 			
+			<!-- <el-table-column prop="pcode" label="父级编号"></el-table-column> 			 -->
 			<el-table-column prop="updateTime" label="修改时间"></el-table-column> 			
 			<el-table-column prop="description" label="描述"></el-table-column> 			
 			<el-table-column prop="status" label="状态" :formatter="formatStatus"></el-table-column> 			
@@ -17,7 +17,9 @@
 			</template>
 			</el-table-column>   
 		</el-table>
-		
+		<el-pagination layout="total, prev, pager, next, jumper" :current-page="page.currentPage" :page-size="page.pageSize" :total="page.total" 
+            @current-change="pageChange" hide-on-single-page></el-pagination>
+
 		<el-dialog title="表单弹框" :visible.sync="dialogFormVisible" center>
       <el-form ref="form" :model="role" label-width="80px">			
         <el-form-item label="编号">
@@ -26,9 +28,9 @@
         <el-form-item label="角色名">
           <el-input v-model="role.name"></el-input>
         </el-form-item> 			
-        <el-form-item label="父级编号">
+        <!-- <el-form-item label="父级编号">
           <el-input v-model="role.pcode" :disabled="true"></el-input>
-        </el-form-item> 			
+        </el-form-item> 			 -->
         <el-form-item label="修改时间">
           <el-input v-model="role.updateTime" :disabled="true"></el-input>
         </el-form-item> 			
@@ -57,16 +59,21 @@ export default {
   name: 'Third',
   data() {
     return {
-      name: "",
+      name: null,
       id: null,
       visible: true,
       isAdd: true,
       dialogFormVisible: false,
+      page: {
+        total: 1,
+        pageSize: 7,
+        currentPage: 1
+      },
       roles: [{
         id: "",
         code: "",
         name: "",
-        pcode: "",
+        // pcode: "",
         updateTime: "",
         description: "",
         status: "",
@@ -75,7 +82,7 @@ export default {
         id: "",
         code: "",
         name: "",
-        pcode: "",
+        // pcode: "",
         updateTime: "",
         description: "",
         status: "",
@@ -93,8 +100,13 @@ export default {
       this.$axios({
         method: "post",
         url: GLOBAL.api+"/role/queryRole",
+        data:{
+          pageSize: this.page.pageSize,
+          pageNum: this.page.currentPage
+        }
       }).then((res) => {
         this.roles = res.data.data;
+        this.page.total = res.data.total;
       }).catch((res) => {
         console.log(res);
         this.$message.error('查询失败');
@@ -106,9 +118,12 @@ export default {
         url: GLOBAL.api+"/role/queryRole",
         data:{
 		      name: this.name,
+          pageSize: this.page.pageSize,
+          pageNum: this.page.currentPage
         }
       }).then((res) => {
         this.roles = res.data.data;
+        this.page.total = res.data.total;
       }).catch((res) => {
         console.log(res);
         this.$message.error('查询失败');
@@ -202,6 +217,10 @@ export default {
         console.log(res);
         this.$message.error('修改失败');
       });
+    },
+    pageChange(page) {
+      this.page.currentPage = page;
+      this.onSearch();
     }
   }
 };
