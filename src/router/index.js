@@ -5,6 +5,7 @@ import First from '@/components/first'
 import Second from '@/components/second'
 import Third from '@/components/third'
 import Fourth from '@/components/fourth'
+import Fifth from '@/components/fifth'
 
 Vue.use(Router)
 
@@ -34,6 +35,11 @@ export default new Router({
       path: '/fourth',
       name: 'fourth',
       component: Fourth
+    },
+    {
+      path: '/fifth',
+      name: 'fifth',
+      component: Fifth
     }
   ]
 })

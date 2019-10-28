@@ -17,10 +17,10 @@
 						<el-menu-item-group title="用户">
 							<router-link :to="{path:'/third'}"><el-menu-item index="1-3">角色管理</el-menu-item></router-link>
 							<router-link :to="{path:'/fourth'}"><el-menu-item index="1-4">权限管理</el-menu-item></router-link>
+							<router-link :to="{path:'/fifth'}"><el-menu-item index="1-5">用户分配角色</el-menu-item></router-link>
 						</el-menu-item-group>
 						<el-submenu index="1-4">
 							<template slot="title">选项4</template>
-							<el-menu-item index="1-4-1">选项4-1</el-menu-item>
 						</el-submenu>
 					</el-submenu>
 				</el-menu>
