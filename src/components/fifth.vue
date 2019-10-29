@@ -117,12 +117,12 @@ export default {
         //渲染多选框
         this.$nextTick(function () {
           for(let i=0;i<res.data.data.length;i++){
-              if(res.data.data[i].checked === "checked"){
-                this.$refs.table.toggleRowSelection(res.data.data[i],true);
-                this.checkedbox.push(res.data.data[i].code);
-              }
+            if(res.data.data[i].checked === "checked"){
+              this.$refs.table.toggleRowSelection(res.data.data[i],true);
+              this.checkedbox.push(res.data.data[i].code);
+            }
           }
-        })
+        });
         console.log(this.checkedbox);
       }).catch((res) => {
         console.log(res);
@@ -187,20 +187,36 @@ export default {
       for (let i = 0; i < selection.length; i++) {
         const row = selection[i];
         if (this.checkedbox.indexOf(row.code) < 0) {
-          this.choose.push('"' + row.code + "'");
+          this.choose.push('"' + row.code + '"');
         }
         select.push(row.code);
       }
       for (let i = 0; i < this.checkedbox.length; i++) {
         if (select.indexOf(this.checkedbox[i]) < 0) {
-          this.cancel.push('"' + this.checkedbox[i] + "'");
+          this.cancel.push('"' + this.checkedbox[i] + '"');
         }
       }
-      console.log("取消："+this.cancel)
-      console.log("选择："+this.choose)
     },
     sava() {
-      
+      this.$axios({
+        method: "get",
+        url: GLOBAL.api+"/user/updateUserRole",
+        params:{
+          userId:this.code,
+          addRoleIds:this.choose.join(','),
+          delRoleIds:this.cancel.join(',')
+        }
+      }).then((res) => {
+        if (res.data > 0) {
+          this.$message({ message: '添加成功', type: 'success' });
+        } else {
+          console.log(res)
+          this.$message.error('保存失败');
+        }
+      }).catch((res) => {
+        console.log(res)
+        this.$message.error('保存失败');
+      });
     }
   }
 };
