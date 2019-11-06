@@ -1,5 +1,12 @@
 <template>
   <div id="app">
+    <el-dialog title="选择位置" :visible.sync="dialogFormVisible" center>
+      <gd-map style="width:100%;height:500px" v-on:leaveSelectAdress ="getAddress" :initPosition='department.position'></gd-map>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button @click="valPosition">确 定</el-button>
+      </span>
+    </el-dialog>
     <el-container>
       <el-aside width="20%">
         <div>
@@ -54,7 +61,8 @@
             <el-input v-model="department.updateTime" :disabled="true"></el-input>
           </el-form-item>
           <br/>
-          <el-form-item label="辖区Id" prop="areaId">
+          <el-form-item label="辖区" prop="areaId">
+            <el-cascader :props="cascaderProps"></el-cascader>
             <el-input v-model="department.areaId"></el-input>
           </el-form-item>
           <el-form-item label="状态" prop="status">
@@ -65,7 +73,11 @@
           </el-form-item>
           <br/>
           <el-form-item label="地址" prop="position">
-            <el-input v-model="department.position" style="width:500px"></el-input>
+            <el-tooltip class="item" effect="light" content="点击输入框后的图标可以通过地图选择哦！" placement="top">
+              <el-input v-model="department.position" style="width:500px">
+                <i slot="suffix" class="el-icon-map-location" style="font-size: 25px;line-height: unset;" @click="kk"></i>
+              </el-input>
+            </el-tooltip>
           </el-form-item>
           <br/>
           <el-form-item label="部门信息" prop="info">
@@ -95,16 +107,33 @@
 
 <script>
 import GLOBAL from '@/components/global_val.js'
-
 export default {
   name: 'First',
   data() {
     return {
+      dialogFormVisible: false,
+      address: '',
       props: {
         code: 'code',
         label: 'name',
         children: [],
         isLeaf: 'isLeaf'
+      },
+      cascaderProps: {
+          lazy: true,
+          lazyLoad (node, resolve) {
+            const { level } = node;
+            setTimeout(() => {
+              const nodes = Array.from({ length: level + 1 })
+                .map(item => ({
+                  value: ++id,
+                  label: `选项${id}`,
+                  leaf: level >= 2
+                }));
+              // 通过调用resolve将子节点数据返回，通知组件数据加载完成
+              resolve(nodes);
+            }, 1000);
+          }
       },
       isAdd: true,
       department: {
@@ -225,7 +254,8 @@ export default {
             parentPath: this.department.parentPath
           }
         }).then((res) => {
-          if(!res.data && typeof(res.data)!="undefined" && res.data!=0) {
+          console.log(res)
+          if(!res.data || res.data != 'Fail') {
             this.$message({
               message: '添加成功',
               type: 'success'
@@ -274,12 +304,24 @@ export default {
         });
       }
     },
+    kk() {
+      this.dialogFormVisible = true;
+    },
     remove(node, data) {
       const parent = node.parent;
       const children = parent.data.children || parent.data;
       const index = children.findIndex(d => d.id === data.id);
       children.splice(index, 1);
     },
+    getAddress(val) {
+      console.log(val)
+      this.address = val;
+    },
+    valPosition() {
+      this.department.position = this.address;
+      this.address = '';
+      this.dialogFormVisible = false;
+    }
   }
 };
 </script>

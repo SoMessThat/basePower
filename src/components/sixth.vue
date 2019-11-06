@@ -143,12 +143,14 @@ export default {
         url: GLOBAL.api+"/right/updateRoleRight",
         params:{
           roleId: this.code,
-          addRightIds: (this.choose !==undefined && this.choose.length > 0) ? this.choose.join(',') :null,
-          delRightIds: (this.cancel !==undefined && this.cancel.length > 0) ? this.cancel.join(',') :null
+          addRightIds: (this.choose !== undefined && this.choose.length > 0) ? this.choose.join(',') : null,
+          delRightIds: (this.cancel !== undefined && this.cancel.length > 0) ? this.cancel.join(',') : null
         }
       }).then((res) => {
         if (res.data > 0) {
           this.$message({ message: '添加成功', type: 'success' });
+          this.choose = [];
+          this.cancel = [];
         } else {
           console.log(res)
           this.$message.error('保存失败');

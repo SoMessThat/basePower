@@ -209,6 +209,8 @@ export default {
       }).then((res) => {
         if (res.data > 0) {
           this.$message({ message: '添加成功', type: 'success' });
+          this.choose = [];
+          this.cancel = [];
         } else {
           console.log(res)
           this.$message.error('保存失败');
