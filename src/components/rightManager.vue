@@ -76,7 +76,7 @@
 import GLOBAL from '@/components/global_val.js'
 
 export default {
-  name: 'First',
+  name: 'RightManager',
   data() {
     return {
       props: {

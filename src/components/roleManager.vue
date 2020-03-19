@@ -56,7 +56,7 @@
 import GLOBAL from '@/components/global_val.js'
 
 export default {
-  name: 'Third',
+  name: 'RoleManager',
   data() {
     return {
       name: null,

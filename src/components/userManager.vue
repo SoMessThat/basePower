@@ -60,7 +60,7 @@
 import GLOBAL from '@/components/global_val.js'
 
 export default {
-  name: 'Second',
+  name: 'UserManager',
   data() {
     return {
       name: '',

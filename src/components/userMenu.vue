@@ -31,7 +31,7 @@
   import navMenu from './menu/navMenu.js'
 
   export default {
-    name: 'Seven',
+    name: 'UserMenu',
     components: {
         navMenu
     },

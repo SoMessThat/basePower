@@ -111,7 +111,7 @@ let id = 0
 import GLOBAL from '@/components/global_val.js'
 
 export default {
-  name: 'First',
+  name: 'DepartmentManager',
   data() {
     return {
       dialogFormVisible: false,

@@ -3,7 +3,7 @@
     <label v-for="navMenu in navMenus" :key="navMenu.code">
       <div v-if="navMenu.list.length <= 0" :key="navMenu.code" :data="navMenu">
         <el-menu-item>
-          <router-link :to="{path:navMenu.url}">
+          <router-link :to="{path:navMenu.jump}">
             {{navMenu.name}}
           </router-link>
         </el-menu-item>

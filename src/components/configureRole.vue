@@ -37,7 +37,7 @@
 import GLOBAL from '@/components/global_val.js'
 
 export default {
-  name: 'Fifth',
+  name: 'ConfigureRole',
   data() {
     return {
       code: null,

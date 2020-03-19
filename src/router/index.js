@@ -1,50 +1,50 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import First from '@/components/first'
-import Second from '@/components/second'
-import Third from '@/components/third'
-import Fourth from '@/components/fourth'
-import Fifth from '@/components/fifth'
-import Sixth from '@/components/sixth'
-import Seven from '@/components/seven'
+import DepartmentManager from '@/components/departmentManager'
+import UserManager from '@/components/userManager'
+import RoleManager from '@/components/roleManager'
+import RightManager from '@/components/rightManager'
+import ConfigureRole from '@/components/configureRole'
+import ConfigureRight from '@/components/configureRight'
+import UserMenu from '@/components/userMenu'
 
 Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/first',
-      name: 'first',
-      component: First
+      path: '/departmentManager',
+      name: 'departmentManager',
+      component: DepartmentManager
     },
     {
-      path: '/second',
-      name: 'second',
-      component: Second
+      path: '/userManager',
+      name: 'userManager',
+      component: UserManager
     },
     {
-      path: '/third',
-      name: 'third',
-      component: Third
+      path: '/roleManager',
+      name: 'roleManager',
+      component: RoleManager
     },
     {
-      path: '/fourth',
-      name: 'fourth',
-      component: Fourth
+      path: '/rightManager',
+      name: 'rightManager',
+      component: RightManager
     },
     {
-      path: '/fifth',
-      name: 'fifth',
-      component: Fifth
+      path: '/configureRole',
+      name: 'configureRole',
+      component: ConfigureRole
     },
     {
-      path: '/sixth',
-      name: 'sixth',
-      component: Sixth
+      path: '/configureRight',
+      name: 'configureRight',
+      component: ConfigureRight
     },
     {
-      path: '/seven',
-      name: 'seven',
-      component: Seven
+      path: '/userMenu',
+      name: 'userMenu',
+      component: UserMenu
     }
   ]
 })

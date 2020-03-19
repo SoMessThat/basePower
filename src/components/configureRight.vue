@@ -25,7 +25,7 @@
 import GLOBAL from '@/components/global_val.js'
 
 export default {
-  name: 'Sixth',
+  name: 'ConfigureRight',
   data() {
     return {
       code: null,
