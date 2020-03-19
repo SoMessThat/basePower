@@ -83,28 +83,9 @@ export default {
         label: 'name',
         children: 'node'
       },
-      tree: [{
-        code: "97",
-        name: "市民诉求统计",
-        node: [],
-        parentCode: ""
-      }],
+      tree: [],
       isAdd: true,
-      right: {
-        id: "",
-        name: "",
-        code: "",
-        pcode: "",
-        updateTime: "",
-        description: "",
-        url: "",
-        icon: "",
-        type: "MENU",
-        status: "ENABLED",
-        applicationStatus: "GROUNDING",
-        path: "",
-        orders: ""
-      }
+      right: {}
     }
   },
   mounted(){

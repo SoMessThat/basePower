@@ -29,7 +29,7 @@
 </template>
 <script>
 export default {
-  name: 'gd-map',  
+  name: 'gd-map',
   props:["initPosition"], 
   mounted(){
     console.log(this.initPosition);

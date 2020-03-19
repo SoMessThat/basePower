@@ -69,24 +69,8 @@ export default {
         pageSize: 7,
         currentPage: 1
       },
-      roles: [{
-        id: "",
-        code: "",
-        name: "",
-        // pcode: "",
-        updateTime: "",
-        description: "",
-        status: "",
-      }],
-      role: {
-        id: "",
-        code: "",
-        name: "",
-        // pcode: "",
-        updateTime: "",
-        description: "",
-        status: "",
-      }
+      roles: [],
+      role: {}
     }
   },
   mounted(){

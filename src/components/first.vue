@@ -8,7 +8,7 @@
       </span>
     </el-dialog>
     <el-container>
-      <el-aside width="20%">
+      <el-aside width="20%" @click.native="clearCurrent">
         <div>
           <el-button @click="onCreate('departmentForm')">新增</el-button>
           <el-button @click="onDel">删除</el-button>
@@ -16,6 +16,7 @@
         <el-tree
           :props="props"
           :load="loadNode"
+          :highlight-current='true'
           ref="tree"
           node-key="code"
           @node-click="handleCheckNode"
@@ -62,7 +63,7 @@
           </el-form-item>
           <br/>
           <el-form-item label="辖区" prop="areaId">
-            <el-cascader :props="cascaderProps"></el-cascader>
+            <!-- <el-cascader :props="cascaderProps" :position="position"></el-cascader> -->
             <el-input v-model="department.areaId"></el-input>
           </el-form-item>
           <el-form-item label="状态" prop="status">
@@ -106,7 +107,9 @@
 </template>
 
 <script>
+let id = 0
 import GLOBAL from '@/components/global_val.js'
+
 export default {
   name: 'First',
   data() {
@@ -120,60 +123,45 @@ export default {
         isLeaf: 'isLeaf'
       },
       cascaderProps: {
-          lazy: true,
-          lazyLoad (node, resolve) {
-            const { level } = node;
-            setTimeout(() => {
-              const nodes = Array.from({ length: level + 1 })
-                .map(item => ({
-                  value: ++id,
-                  label: `选项${id}`,
-                  leaf: level >= 2
-                }));
-              // 通过调用resolve将子节点数据返回，通知组件数据加载完成
-              resolve(nodes);
-            }, 1000);
-          }
+         label: 'cityName',
+         children: 'citys',
+         value: 'code',
+         leaf: false
       },
+      position: [],
       isAdd: true,
-      department: {
-        id: null,
-        code: "",
-        name: "",
-        type: "",
-        info: "",
-        registrationTime: "",
-        duty: "",
-        introduction: "",
-        position: "",
-        other: "",
-        masterName: "",
-        masterTel: "",
-        areaId: 0,
-        parentCode: "",
-        parentPath: "",
-        createTime: "",
-        updateTime: "",
-        status: ""
-      }
+      department: {}
     }
+  },
+  mounted() {
+    // this.$axios({
+    //   method: "get",
+    //   url: GLOBAL.api+"/city/getCitys",
+    //   params:{
+    //     code: ""
+    //   }
+    // }).then((res) => {
+    //   this.options = res.data;
+    // }).catch((res) => {
+    //   console.log(res)
+    //   this.$message.error('查找失败');
+    // })
   },
   methods: {
     handleCheckNode(data, node, vueComponent) {
-      console.log(data, node, vueComponent);
       this.$axios({
-          method: "get",
-          url: GLOBAL.api+"/department/findDepartmentByCode",
-          params:{
-            code:data.code
-          }
-        }).then((res) => {
-          this.department = res.data;
-          this.isAdd = false;
-        }).catch((res) => {
-          console.log(res)
-          this.$message.error('查找失败');
-        });
+        method: "get",
+        url: GLOBAL.api+"/department/findDepartmentByCode",
+        params:{
+          code:data.code
+        }
+      }).then((res) => {
+        this.department = res.data;
+        this.isAdd = false;
+      }).catch((res) => {
+        console.log(res)
+        this.$message.error('查找失败');
+      });
     },
     loadNode(node, resolve) {
       if (node.level === 0) {
@@ -203,7 +191,6 @@ export default {
       }
     },
     onCreate(formName) {
-      console.log(this.$refs.tree.getCurrentKey())
       this.$refs[formName].resetFields();
       this.isAdd = true;
       this.department.parentCode = this.$refs.tree.getCurrentKey()
@@ -233,7 +220,6 @@ export default {
     },
     onSubmit() {
       if (this.isAdd) {
-        this.$refs.tree.getCheckedKeys()
         this.$axios({
           method: "post",
           url: GLOBAL.api+"/department/addDepartment",
@@ -254,14 +240,12 @@ export default {
             parentPath: this.department.parentPath
           }
         }).then((res) => {
-          console.log(res)
           if(!res.data || res.data != 'Fail') {
             this.$message({
               message: '添加成功',
               type: 'success'
             });
-            this.$refs.tree.append({"code":res.data,"name":this.department.name,"parentCode":this.department.parentCode,"node":null},
-              this.$refs.tree.getCurrentKey())
+            this.$refs.tree.append({"code": res.data,"name": this.department.name,"isLeaf": true,"children": null}, this.department.parentCode)
           }else {
             this.$message.error('添加失败');
           }
@@ -274,7 +258,6 @@ export default {
           url: GLOBAL.api+"/department/updateDepartmentById",
           data:{
             id: this.department.id,
-            code: this.department.code,
             name: this.department.name,
             type: this.department.type,
             info: this.department.info,
@@ -286,7 +269,6 @@ export default {
             masterName: this.department.masterName,
             masterTel: this.department.masterTel,
             areaId: 0,
-            parentCode: this.department.parentCode,
             parentPath: this.department.parentPath,
             status: this.department.status
           }
@@ -296,6 +278,8 @@ export default {
               message: '修改成功',
               type: 'success'
             });
+            console.log(this.$refs.tree.getNode(this.department.code))
+            this.$refs.tree.getNode(this.department.code).data.name = this.department.name;
           }else {
             this.$message.error('修改失败');
           }
@@ -321,6 +305,9 @@ export default {
       this.department.position = this.address;
       this.address = '';
       this.dialogFormVisible = false;
+    },
+    clearCurrent() {
+      this.$refs.tree.setCurrentKey(null)
     }
   }
 };

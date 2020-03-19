@@ -79,45 +79,9 @@ export default {
         children: [],
         isLeaf: 'isLeaf'
       },
-      department: {
-        id: null,
-        code: "",
-        name: "",
-        type: "",
-        info: "",
-        registrationTime: "",
-        duty: "",
-        introduction: "",
-        position: "",
-        other: "",
-        masterName: "",
-        masterTel: "",
-        areaId: 0,
-        parentCode: "",
-        parentPath: "",
-        createTime: "",
-        updateTime: "",
-        status: ""
-      },
-      users: [{
-        id: null,
-        account: "",
-        name: "",
-        idCard: "",
-        phone: "",
-        email: "",
-        createTime: "",
-        updateTime: "",
-        visible: true,
-        status: ""
-      }],
-      user: {
-        account: "",
-        name: "",
-        idCard: "",
-        phone: "",
-        email: ""
-      }
+      department: {},
+      users: [],
+      user: {}
     }
   },
   mounted(){

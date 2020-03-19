@@ -56,40 +56,9 @@ export default {
         children: [],
         isLeaf: 'isLeaf'
       },
-      department: {
-        id: null,
-        code: "",
-        name: "",
-        type: "",
-        info: "",
-        registrationTime: "",
-        duty: "",
-        introduction: "",
-        position: "",
-        other: "",
-        masterName: "",
-        masterTel: "",
-        areaId: 0,
-        parentCode: "",
-        parentPath: "",
-        createTime: "",
-        updateTime: "",
-        status: ""
-      },
+      department: {},
       users: [],
-      user: {
-        id: null,
-        account: "",
-        name: "",
-        code: "",
-        idCard: "",
-        phone: "",
-        email: "",
-        createTime: "",
-        updateTime: "",
-        visible: true,
-        status: ""
-      },
+      user: {},
       roles: []
     }
   },

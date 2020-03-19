@@ -6,10 +6,9 @@ import Third from '@/components/third'
 import Fourth from '@/components/fourth'
 import Fifth from '@/components/fifth'
 import Sixth from '@/components/sixth'
+import Seven from '@/components/seven'
 
 Vue.use(Router)
-
-
 export default new Router({
   routes: [
     {
@@ -41,6 +40,11 @@ export default new Router({
       path: '/sixth',
       name: 'sixth',
       component: Sixth
+    },
+    {
+      path: '/seven',
+      name: 'seven',
+      component: Seven
     }
   ]
 })

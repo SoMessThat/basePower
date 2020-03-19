@@ -39,21 +39,7 @@ export default {
       },
       tree: [],
       isAdd: true,
-      right: {
-        id: "",
-        name: "",
-        code: "",
-        pcode: "",
-        updateTime: "",
-        description: "",
-        url: "",
-        icon: "",
-        type: "",
-        status: "",
-        applicationStatus: "",
-        path: "",
-        orders: ""
-      },
+      right: {},
       roles: {},
       roles: []
     }
